@@ -1,9 +1,12 @@
 <?php
 
-// Include the necessary files
-require_once 'Crawler.php';
-require_once 'DealFormatter.php';
-require_once 'Helpers.php';
+// Simple autoloader function
+spl_autoload_register(function ($class) {
+    $path = 'src/' . str_replace('\\', '/', $class) . '.php';
+    if (file_exists($path)) {
+        require $path;
+    }
+});
 
 // Use the namespace
 use TravelDealCrawler\Crawler;
@@ -16,17 +19,19 @@ $crawler = new Crawler();
 $url = "https://example-travel-site.com";
 $deals = $crawler->findDeals($url);
 
-// If you have any deals, format them
+// Check if any deals were found
 if ($deals) {
+    // Create an instance of the DealFormatter class
     $formatter = new DealFormatter();
+
+    // Format and display each deal
     foreach ($deals as $deal) {
-        // Format each deal (assuming you have a method for this in DealFormatter)
-        echo $formatter->formatDeal($deal);
+        echo $formatter->formatDeal($deal); // Assuming you have a method formatDeal
         echo "<br>";
     }
 } else {
     echo "No deals found.";
 }
 
-// Example of using the helper function
-echo "Converted currency: " . TravelDealCrawler\convertCurrency(100, 'USD', 'EUR');
+// Example of using a helper function (if you have one)
+echo "Converted currency: " . TravelDealCrawler\convertCurrency(100, 'USD', 'EUR'); // Assuming you have a convertCurrency function
